@@ -23,7 +23,7 @@ public class LoginServlet extends HttpServlet {
 		String pwd = request.getParameter("pwd");
 		String userID = getServletConfig().getInitParameter("user");
 		String password = getServletConfig().getInitParameter("password");
-		if (validateUserName(user) && userID.equals(user) && password.equals(pwd)) {
+		if (validateUserName(user) && validatePassword(pwd) && userID.equals(user) && password.equals(pwd)) {
 			request.setAttribute("user", user);
 			request.getRequestDispatcher("LoginSuccess.jsp").forward(request, response);
 		} else {
@@ -40,6 +40,16 @@ public class LoginServlet extends HttpServlet {
 		Matcher matcher = pattern.matcher(check);
 		if (matcher.find()) {
 			return true;
+		}
+		return false;
+	}
+
+	private boolean validatePassword(String check) {
+		String regex = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,}$";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(check);
+		if(matcher.find()) {
+			return true
 		}
 		return false;
 	}
